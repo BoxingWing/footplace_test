@@ -106,14 +106,14 @@ int main() {
 
         pf2cen(0) = p_cen_w(0) - pfW[0];
         pf2cen(1) = p_cen_w(1) - pfW[1];
-        pf2cen(2) = 0.53279;//p_cen_w(2) - pfW[2];
+        pf2cen(2) = p_cen_w(2) - pfW[2];
 
-        printf("eul[2] = %.6f,  eul[1] = %.6f,  eul[0] = %.6f,  yaw0 = %.6f\n", eul[2], eul[1], eul[0], yaw0);
-        printf("p_com_w = %.6f, %.6f, %.6f\n", pCoM[0], pCoM[1], pCoM[2]);
-        printf("p_cen_w = %.6f, %.6f, %.6f\n", p_cen_w(0), p_cen_w(1), p_cen_w(2));
-        printf("pfW = %.6f, %.6f, %.6f\n", pfW[0], pfW[1], pfW[2]);
-        printf("pf2cen = %.6f, %.6f, %.6f\n", pf2cen(0), pf2cen(1), pf2cen(2));
-        printf("%d\n",i);
+//        printf("eul[2] = %.6f,  eul[1] = %.6f,  eul[0] = %.6f,  yaw0 = %.6f\n", eul[2], eul[1], eul[0], yaw0);
+//        printf("p_com_w = %.6f, %.6f, %.6f\n", pCoM[0], pCoM[1], pCoM[2]);
+//        printf("p_cen_w = %.6f, %.6f, %.6f\n", p_cen_w(0), p_cen_w(1), p_cen_w(2));
+//        printf("pfW = %.6f, %.6f, %.6f\n", pfW[0], pfW[1], pfW[2]);
+//        printf("pf2cen = %.6f, %.6f, %.6f\n", pf2cen(0), pf2cen(1), pf2cen(2));
+//        printf("%d\n",i);
 
         ww = R* (Eigen::Matrix<double, 3, 1>(omegaL[0], omegaL[1], omegaL[2]));
         vw << vCoM[0], vCoM[1], 0;//vCoM[2];
@@ -205,6 +205,10 @@ int main() {
         tmpValue.push_back(ww(0));//45
         tmpValue.push_back(ww(1));//46
         tmpValue.push_back(ww(2));//47
+
+        tmpValue.push_back(AngularMomentum.Lcom(0));//48
+        tmpValue.push_back(AngularMomentum.Lcom(1));//49
+        tmpValue.push_back(AngularMomentum.Lcom(2));//50
 
         tmpStr = fmt::format("{:.5f}", fmt::join(tmpValue, " "));
         LOG_INFO(dl, "{}", tmpStr);

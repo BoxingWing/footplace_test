@@ -2,6 +2,7 @@
 // Created by kobayasi on 23-4-7.
 //
 #include "Kalman.h"
+#include <iostream>
 
 Angular_Momentum_class::Angular_Momentum_class()  {
     I.setZero();
@@ -20,7 +21,7 @@ Angular_Momentum_class::Angular_Momentum_class()  {
     Qu.setZero();
     R.setZero();
 
-    P0b.setZero();
+    P0b=Eigen::Matrix3d::Identity();
     startFlag = false;
 }
 
@@ -34,19 +35,21 @@ void Angular_Momentum_class::init(){
     C << 1, 0, 0,
             0, 1, 0,
             0, 0, 1;
+    Bv2.setZero();
 
     Eigen::Matrix<double,3, 3> Cu, Qx;
     Cu << 8.698940917230453e-08, 0, 0,
             0, 3.925033562397060e-09, 0,
             0, 0, 1.852578958119684e-12;
     Qu = B*Cu*B.transpose();
-    Qx << 1e-8, 0, 0,
-            0, 5e-6, 0,
-            0, 0, 1e-8;
-    Q = Qx + Qu;
-    R << 8.462057579429161e-05, 0, 0,
-            0, 2.511103693685685e-04, 0,
-            0, 0, 1.004434228773781e-05;
+    Qx << 8e-8, 0, 0,
+            0, 8e-8, 0,
+            0, 0, 8e-8;
+//    Q = Qx + Qu;
+    Q=Qx;
+    R << 1e-05, 0, 0,
+            0, 1e-05, 0,
+            0, 0, 1e-05;
     startFlag = true;
 };
 
@@ -63,12 +66,17 @@ void Angular_Momentum_class::cal(Eigen::Matrix<double, 3, 1> p, Eigen::Matrix<do
     S.setZero();
     K.setZero();
     E << 1, 0, 0, 0, 1, 0, 0, 0, 1;
-
+    Bv2<<0,-p(2),p(1),
+         p(2),0,-p(0),
+         -p(1),p(0),0;
     if (startFlag == true) {
         Lcom = I*w;
         Lm = Lcom + m*p.cross(v);
 
-        x1f = A * x0b + B * p;
+//        x1f = A * x0b + B * p;
+        Eigen::Vector3d u;
+        u<<0,0,m*g;
+        x1f=A*x0b+Bv2*Ts*u;
         P1f = A * P0b * A.transpose() + Q;
 
         S = R + C * P1f * C.transpose();
@@ -77,12 +85,14 @@ void Angular_Momentum_class::cal(Eigen::Matrix<double, 3, 1> p, Eigen::Matrix<do
         P1b = (E - K * C) * P1f;
     }
     else{
-        x1b = x0b;
-        P1b = P0b;
+        x1b <<0,0,0;
+        P1b = Eigen::Matrix3d::Identity();
     }
     x0b = x1b;
     P0b = P1b;
 
     L = x1b;
+
+//    std::cout<<P1b<<std::endl;
 }
 

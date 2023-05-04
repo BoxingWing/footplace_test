@@ -33,6 +33,8 @@ pcen_w = data_test_op(:,42:44);%42-44
 
 ww = data_test_op(:,45:47);%45-47
 
+Lcom=data_test_op(:,48:50);
+
 figure;%1
 for i = 1:3
     subplot(4,3,i);
@@ -144,6 +146,17 @@ plot(swing,'b');
 legend("swing");
 
 
+figure();
+subplot(2,1,1)
+plot(Lcom(:,1));
+hold on;
+plot(L(:,1));
+legend('Lcom-x','L-x');
+subplot(2,1,2)
+plot(Lcom(:,2));
+hold on;
+plot(L(:,2));
+legend('Lcom-y','L-y');
 
 
 

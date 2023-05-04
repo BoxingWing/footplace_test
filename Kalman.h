@@ -19,7 +19,7 @@ class Angular_Momentum_class {
         Eigen::Matrix<double, 3, 1>  L, Lcom, Lm;
 
         Eigen::Matrix<double, 3, 1>    x0b, u0, y1;
-        Eigen::Matrix<double, 3, 3>    A, B, C;
+        Eigen::Matrix<double, 3, 3>    A, B, C, Bv2;
         Eigen::Matrix<double, 3, 3>    Q, Qu, R;
         Eigen::Matrix<double, 3, 3>    P0b;
         bool startFlag;
